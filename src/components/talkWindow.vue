@@ -1,10 +1,11 @@
 <template>
     <div class="board">
-        <p>聊天面板</p>
+        <p>社区发言板</p>
           <div class="talkLog">
               <div class="logwin">
                   <lang-cell v-for="(o, index) in history" 
                   :dir="o.dir"
+                  :name='o.name'
                   :content="o.str"
                   :key="index"></lang-cell>
               </div>
@@ -26,19 +27,25 @@
             return {
                 content: "",
                 history: [
-                    {dir: false, str: '你好'},
-                    {dir: true, str: '你好'}
                 ]
             }
         },
         components: {
             langCell
         },
+        created () {
+            this.$store.getters.on ('message', (o) => {
+                this.$set(this.history, this.history.length, 
+                {
+                  dir: false,
+                  str: o.message,
+                  name: o.name
+                })
+            })
+        },
         methods: {
           sendMessage() {
-              /* eslint-disable */
-
-              if(!this.content == '') {
+              if(this.content == '\n') {
                   alert("发送消息不能为空");
                   this.content = '';
                   return;
@@ -48,8 +55,11 @@
                   dir: true,
                   str: this.content
               })
-              this.content = ""
-          }  
+              this.$store.getters.emit('send', {
+                  message: this.content
+              })
+              this.content = "";
+          }
         },
     }
 </script>
@@ -72,7 +82,7 @@
     .talkLog .logwin {
         border: 1px;
         height: 48vh;
-        margin: 10px 5px;
+        margin: 10px auto;
         box-sizing: border-box;
         border: 1px solid rgba(0, 0, 0, 0.25);
         border-radius: 5px;

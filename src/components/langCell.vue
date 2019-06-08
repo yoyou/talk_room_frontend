@@ -3,12 +3,14 @@
         <div class="ph" :class=" dir ? 'lang-right': 'lang-left'">
             <img src="../assets/2.png" alt="">
         </div>
+        <p v-if="!dir" class="name">{{name}}</p>
         <div class="lang" :class=" dir ? 'lang-right': 'lang-left'"
             :style="{
                 'backgroundColor': dir ? 'yellow': 'rgba(0, 0, 0, 0.15)'
             }"
         >
-            <p >{{ content }}</p>
+            
+            <p class="message">{{ content }}</p>
         </div>
     </div>
 </template>
@@ -26,6 +28,9 @@ export default {
             default: false
         },
         content: {
+            type: String
+        },
+        name: {
             type: String
         }
     }
@@ -45,17 +50,25 @@ export default {
         background-color: rgba(0, 0, 0, 0.15);
         font-size: 10px;
         box-sizing: border-box;
-        padding: 6px 15px;
+        padding: 0px 15px;
         border: 0px;
         border-radius: 3px;
         overflow: hidden;
         display: inline-block;
     }
 
-    .lang p {
+    .lang .message {
         border: 0;
         max-width: 20em;
-        word-wrap: break-word
+        word-wrap: break-word;
+    }
+
+    .name {
+        border: 0;
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.35);
+        line-height: 1em;
+        background-color: #fff
     }
 
     .ph {
